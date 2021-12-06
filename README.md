@@ -44,3 +44,23 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+### 配置 eslint、 prettier 和 commitlint 规范工程
+
+[prettier 官网](https://prettier.io/)
+
+```shell
+npm install --save-dev --save-exact prettier
+```
+
+然后，创建一个空的配置文件，让编辑器和其他工具知道您正在使用 Prettier：
+
+接下来，创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件，让[Prettier](https://prettier.io/docs/en/ignore.html) CLI 和编辑器知道哪些文件*不能*格式化。下面是一个例子：
+
+```
+# Ignore artifacts:
+build
+coverage
+```
+
+使用 `Pre-commit HOOK` 提交的时候自动进行格式化
