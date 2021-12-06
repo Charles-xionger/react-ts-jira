@@ -64,3 +64,17 @@ coverage
 ```
 
 使用 `Pre-commit HOOK` 提交的时候自动进行格式化
+
+```shell
+npx mrm@2 lint-staged
+
+// package.json
+"husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md,ts,tsx}": "prettier --write"
+  }
+```
