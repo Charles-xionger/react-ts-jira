@@ -80,3 +80,20 @@ npx mrm@2 lint-staged
 ```
 
 避免 eslint 和 prettier 冲突
+安装 eslint-config-prettier 插件
+
+`yarn add eslint-config-prettier -D`
+
+```
+ "eslintConfig" : {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "prettier"
+    ]
+  }
+
+```
+
+git 代码 commit 规范
+[commitlint 配置网站](https://github.com/conventional-changelog/commitlint)
