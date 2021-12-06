@@ -78,3 +78,18 @@ npx mrm@2 lint-staged
     "*.{js,css,md,ts,tsx}": "prettier --write"
   }
 ```
+
+避免 eslint 和 prettier 冲突
+
+```json
+// 安装  eslint-config-prettier 插件
+// yarn add eslint-config-prettier -D
+// package.json
+ "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "prettier" // 此处添加
+    ]
+  }
+```
