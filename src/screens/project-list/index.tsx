@@ -21,22 +21,11 @@ export const ProjectListScreen = () => {
   const client = useHttp();
   useEffect(() => {
     client("projects", { data: cleanObject(debouncedParam) }).then(setList);
-    // fetch(
-    //   `${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`
-    // ).then(async (response) => {
-    //   if (response.ok) {
-    //     setList(await response.json());
-    //   }
-    // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedParam]);
 
   useMount(() => {
     client("users").then(setUsers);
-    // fetch(`${apiUrl}/users`).then(async (response) => {
-    //   if (response.ok) {
-    //     setUsers(await response.json());
-    //   }
-    // });
   });
   return (
     <Container>
