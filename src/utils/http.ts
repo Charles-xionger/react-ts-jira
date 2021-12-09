@@ -20,6 +20,7 @@ export const http = async (
     },
     ...customConfig,
   };
+  // 请求方式判断 ”GET“ or other 携带参数方式
   if (config.method.toUpperCase() === "GET") {
     endpoint += `?${qs.stringify(data)}`;
   } else {
@@ -48,7 +49,10 @@ export const http = async (
 
 export const useHttp = () => {
   const { user } = useAuth();
-  // TODO TS 操作符优化下方代码 Parameters<typeof http>
-  return (...[endPoint, config]: [string, Config?]) =>
+  // TODO TS 操作符优化下方代码
+  // return (...[endPoint, config]: [string, Config?]) =>
+  //   http(endPoint, { ...config, token: user?.token });
+
+  return (...[endPoint, config]: Parameters<typeof http>) =>
     http(endPoint, { ...config, token: user?.token });
 };
