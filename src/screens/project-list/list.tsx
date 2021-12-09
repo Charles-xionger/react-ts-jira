@@ -23,6 +23,7 @@ export const List = ({ list, users }: ListProps) => {
           sorter: (a, b) => a.name.localeCompare(b.name), // localCompare 中文排序
         },
         {
+          key: "id",
           title: "负责人",
           render(value, project) {
             return (
