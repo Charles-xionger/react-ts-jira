@@ -3,7 +3,7 @@ import { User } from "./search-panel";
 import { Table } from "antd";
 import { TableProps } from "antd/es/table";
 import dayjs from "dayjs";
-interface Project {
+export interface Project {
   id: string;
   name: string;
   personId: string;

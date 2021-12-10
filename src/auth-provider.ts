@@ -20,10 +20,11 @@ export const login = (data: { username: string; password: string }) => {
     },
     body: JSON.stringify(data),
   }).then(async (response) => {
+    const result = await response.json();
     if (response.ok) {
-      return handleUserResponse(await response.json());
+      return handleUserResponse(result);
     } else {
-      return Promise.reject(data);
+      return Promise.reject(result);
     }
   });
 };
@@ -36,10 +37,11 @@ export const register = (data: { username: string; password: string }) => {
     },
     body: JSON.stringify(data),
   }).then(async (response) => {
+    const result = await response.json();
     if (response.ok) {
-      return handleUserResponse(await response.json());
+      return handleUserResponse(result);
     } else {
-      return Promise.reject(data);
+      return Promise.reject(result);
     }
   });
 };
