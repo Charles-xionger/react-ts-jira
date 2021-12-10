@@ -1,6 +1,7 @@
 import React from "react";
 import { User } from "./search-panel";
 import { Table } from "antd";
+import { TableProps } from "antd/es/table";
 import dayjs from "dayjs";
 interface Project {
   id: string;
@@ -10,13 +11,20 @@ interface Project {
   organization: string;
   created: number;
 }
-interface ListProps {
-  list: Project[];
+
+/**
+ *
+ * interface GenericIdentityFn<T> {
+    (arg: T): T;
+}
+ */
+interface ListProps extends TableProps<Project> {
   users: User[];
 }
-export const List = ({ list, users }: ListProps) => {
+export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
+      rowKey={(list) => list.id}
       pagination={false}
       columns={[
         {
@@ -53,8 +61,7 @@ export const List = ({ list, users }: ListProps) => {
           },
         },
       ]}
-      dataSource={list}
-      rowKey={(list) => list.id}
+      {...props}
     />
   );
 };
