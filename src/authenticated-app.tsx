@@ -8,6 +8,7 @@ import styled from "@emotion/styled";
 import { Row } from "./components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
+import { useDocumentTitle } from "./utils";
 /**
  * grid 和 flex 各自的使用场景
  * 1. 要考虑是一维布局还是二维布局
@@ -20,6 +21,7 @@ import { Button, Dropdown, Menu } from "antd";
 
 export const AuthenticatedApp = () => {
   const { logout, user } = useAuth();
+  useDocumentTitle("项目列表", false);
   return (
     <Container>
       <Header between={true}>

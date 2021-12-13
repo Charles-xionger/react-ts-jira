@@ -57,3 +57,26 @@ export const useArray = <P>(initialArray: P[]) => {
     },
   };
 };
+
+/**
+ * 自定修改页面的title
+ * @param title 页面标题
+ * @param keepOnUnmount 页面标题是否保持
+ */
+export const useDocumentTitle = (
+  title: string,
+  keepOnUnmount: boolean = true
+) => {
+  const oldTitle = document.title;
+  useEffect(() => {
+    window.document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnUnmount) {
+        document.title = oldTitle;
+      }
+    };
+  }, []);
+};
