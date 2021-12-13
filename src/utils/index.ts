@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // 存在特殊情况， 无法判断 0 使用此函数
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
@@ -67,7 +67,9 @@ export const useDocumentTitle = (
   title: string,
   keepOnUnmount: boolean = true
 ) => {
-  const oldTitle = document.title;
+  const oldTitle = useRef(document.title).current;
+  // 页面加载时： 旧title
+  // 加载后： 新title
   useEffect(() => {
     window.document.title = title;
   }, [title]);
@@ -75,8 +77,9 @@ export const useDocumentTitle = (
   useEffect(() => {
     return () => {
       if (!keepOnUnmount) {
+        // 如果不指定依赖，读到的就是旧title
         document.title = oldTitle;
       }
     };
-  }, []);
+  }, [oldTitle, keepOnUnmount]);
 };
