@@ -3,6 +3,10 @@ import { User } from "./search-panel";
 import { Table } from "antd";
 import { TableProps } from "antd/es/table";
 import dayjs from "dayjs";
+// react-router 和 react-router-dom 的关系,类似于 react 和 react-dom/react-native/react-vr...
+// react 核心库处理虚拟的，逻辑计算， 得出的结果由 react-dom消费。react-dom 依赖于浏览器的环境
+import { Link } from "react-router-dom";
+// TODO 把所有ID改为number类型
 export interface Project {
   id: string;
   name: string;
@@ -29,8 +33,10 @@ export const List = ({ users, ...props }: ListProps) => {
       columns={[
         {
           title: "名称",
-          dataIndex: "name",
           sorter: (a, b) => a.name.localeCompare(b.name), // localCompare 中文排序
+          render(value, project) {
+            return <Link to={String(project.id)}>{project.name}</Link>;
+          },
         },
         {
           title: "部门",

@@ -8,7 +8,10 @@ import styled from "@emotion/styled";
 import { Row } from "./components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
-import { useDocumentTitle } from "./utils";
+import { Routes, Route } from "react-router";
+import { BrowserRouter as Router, Navigate } from "react-router-dom";
+import { ProjectScreen } from "./screens/project";
+import { resetRoute } from "./utils";
 /**
  * grid 和 flex 各自的使用场景
  * 1. 要考虑是一维布局还是二维布局
@@ -20,41 +23,54 @@ import { useDocumentTitle } from "./utils";
  */
 
 export const AuthenticatedApp = () => {
-  const { logout, user } = useAuth();
-  useDocumentTitle("项目列表", false);
   return (
     <Container>
-      <Header between={true}>
-        <HeaderLeft gap={true}>
-          <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
-          <h2>用户</h2>
-          <h2>项目</h2>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key={"logout"}>
-                  <Button type={"link"} onClick={logout}>
-                    登出
-                  </Button>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <Button onClick={(e) => e.preventDefault()}>
-              Hi, {user?.name}
-            </Button>
-          </Dropdown>
-        </HeaderRight>
-      </Header>
+      <PageHeader />
       <Main>
-        <ProjectListScreen />
+        <Router>
+          <Routes>
+            <Route path={"/projects"} element={<ProjectListScreen />} />
+            <Route
+              path={"/projects/:projectId/*"}
+              element={<ProjectScreen />}
+            />
+            <Route path={"/"} element={<Navigate to={"/projects"} />} />
+          </Routes>
+        </Router>
       </Main>
     </Container>
   );
 };
 
+const PageHeader = () => {
+  const { logout, user } = useAuth();
+  return (
+    <Header between={true}>
+      <HeaderLeft gap={true}>
+        <Button type={"link"} onClick={resetRoute}>
+          <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
+        </Button>
+        <h2>用户</h2>
+        <h2>项目</h2>
+      </HeaderLeft>
+      <HeaderRight>
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key={"logout"}>
+                <Button type={"link"} onClick={logout}>
+                  登出
+                </Button>
+              </Menu.Item>
+            </Menu>
+          }
+        >
+          <Button onClick={(e) => e.preventDefault()}>Hi, {user?.name}</Button>
+        </Dropdown>
+      </HeaderRight>
+    </Header>
+  );
+};
 const Container = styled.div`
   display: grid;
   // fr fraction(片段)
