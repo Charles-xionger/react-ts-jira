@@ -1,18 +1,17 @@
 import React from "react";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { useState } from "react";
 import { useDebounce, useDocumentTitle } from "utils";
 import { Typography } from "antd";
 import styled from "@emotion/styled";
 import { useProjects } from "../../utils/project";
 import { useUsers } from "../../utils/user";
+import { useUrlQueryParam } from "../../utils/url";
 
 export const ProjectListScreen = () => {
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+  // 基本类型， 可以放到依赖里；组件状态可以放到依赖里；非组件状态的对象，决不能放到依赖里
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  // console.log('param', param)
   const debouncedParam = useDebounce(param, 200);
   const { isLoading, error, data: list } = useProjects(debouncedParam);
 
