@@ -19,7 +19,7 @@ interface IdSelectProps
  * @param props
  * @constructor
  */
-export function IdSelect(props: IdSelectProps) {
+export const IdSelect = (props: IdSelectProps) => {
   const { value, onChange, defaultOptionName, options, ...restProps } = props;
   return (
     <Select
@@ -38,6 +38,6 @@ export function IdSelect(props: IdSelectProps) {
       ))}
     </Select>
   );
-}
+};
 
 const toNumber = (value: unknown) => (isNaN(Number(value)) ? 0 : Number(value));
