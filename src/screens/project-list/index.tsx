@@ -12,6 +12,7 @@ export const ProjectListScreen = () => {
   useDocumentTitle("项目列表", false);
   // 基本类型， 可以放到依赖里；组件状态可以放到依赖里；非组件状态的对象，决不能放到依赖里
   const [param, setParam] = useProjectsSearchParams();
+  console.log("param", param);
   const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
   const { data: users } = useUsers();
   return (

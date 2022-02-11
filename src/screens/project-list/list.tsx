@@ -6,6 +6,8 @@ import dayjs from "dayjs";
 // react-router 和 react-router-dom 的关系,类似于 react 和 react-dom/react-native/react-vr...
 // react 核心库处理虚拟的，逻辑计算， 得出的结果由 react-dom消费。react-dom 依赖于浏览器的环境
 import { Link } from "react-router-dom";
+import { Pin } from "../../components/pin";
+import { useEditProject } from "../../utils/project";
 // TODO 把所有ID改为number类型
 export interface Project {
   id: number;
@@ -26,11 +28,24 @@ interface ListProps extends TableProps<Project> {
   users: User[];
 }
 export const List = ({ users, ...props }: ListProps) => {
+  const { mutate } = useEditProject();
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   return (
     <Table
       rowKey={(list) => list.id}
       pagination={false}
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(value, project) {
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={pinProject(project.id)}
+              />
+            );
+          },
+        },
         {
           title: "名称",
           sorter: (a, b) => a.name.localeCompare(b.name), // localCompare 中文排序
