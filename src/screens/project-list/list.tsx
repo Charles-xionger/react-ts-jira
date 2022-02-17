@@ -26,10 +26,16 @@ export interface Project {
  */
 interface ListProps extends TableProps<Project> {
   users: User[];
+  refresh?: () => void;
 }
-export const List = ({ users, ...props }: ListProps) => {
+export const List = ({ users, refresh, ...props }: ListProps) => {
   const { mutate } = useEditProject();
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const pinProject = (id: number) => (pin: boolean) => {
+    mutate({ id, pin });
+    if (refresh) {
+      refresh();
+    }
+  };
   return (
     <Table
       rowKey={(list) => list.id}

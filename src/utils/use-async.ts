@@ -29,6 +29,8 @@ export const useAsync = <D>(
     ...defaultInitialState,
     ...initialState,
   });
+  // retry 重新请求
+  const [retry, setRetry] = useState(() => () => {});
   // 组件挂载状态
   const mountedRef = useMountedRef();
   /**
@@ -55,11 +57,20 @@ export const useAsync = <D>(
    * 判断状态函数
    * @param promise
    */
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { retry: () => Promise<D> }
+  ) => {
     // 没有数据传入或者传入数据不正确
     if (!promise || !promise.then) {
       throw new Error("请传入 Promise 类型数据");
     }
+    // 判断是否需要刷新
+    setRetry(() => () => {
+      if (runConfig?.retry) {
+        run(runConfig?.retry(), runConfig);
+      }
+    });
     //设置初始状态
     setState({
       ...state,
@@ -90,6 +101,7 @@ export const useAsync = <D>(
     run,
     setData,
     setError,
+    retry,
     ...state,
   };
 };
