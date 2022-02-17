@@ -3,7 +3,6 @@ import { useMemo } from "react";
 
 export const useProjectsSearchParams = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
-  console.log(param, "paramQuery");
   return [
     useMemo(
       () =>
@@ -16,10 +15,6 @@ export const useProjectsSearchParams = () => {
 
 const numberIsNotNaN = (value: any) => {
   // NaN === NaN => false
-  const numberIsNotNaN = Object.is(Number(value), NaN)
-    ? undefined
-    : Number(value);
-  console.log(numberIsNotNaN, "numberIsNotNaN");
 
-  return numberIsNotNaN;
+  return Object.is(Number(value), NaN) ? undefined : Number(value);
 };

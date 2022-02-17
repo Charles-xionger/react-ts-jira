@@ -1,6 +1,7 @@
 import qs from "qs";
 import * as auth from "auth-provider";
 import { useAuth } from "../context/auth-context";
+import { useCallback } from "react";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -23,7 +24,6 @@ export const http = async (
   // 请求方式判断 ”GET“ or other 携带参数方式
   if (config.method.toUpperCase() === "GET") {
     endpoint += `?${qs.stringify(data)}`;
-    console.log("queryString", endpoint);
   } else {
     config.body = JSON.stringify(data || {});
   }
@@ -54,6 +54,9 @@ export const useHttp = () => {
   // return (...[endPoint, config]: [string, Config?]) =>
   //   http(endPoint, { ...config, token: user?.token });
 
-  return (...[endPoint, config]: Parameters<typeof http>) =>
-    http(endPoint, { ...config, token: user?.token });
+  return useCallback(
+    (...[endPoint, config]: Parameters<typeof http>) =>
+      http(endPoint, { ...config, token: user?.token }),
+    [user?.token]
+  );
 };

@@ -1,7 +1,7 @@
 /**
  * 异步操作封装 customer hook
  */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMountedRef } from "./index";
 
 interface State<D> {
@@ -37,62 +37,68 @@ export const useAsync = <D>(
    * 数据加载失成功
    * @param data
    */
-  const setData = (data: D) =>
-    setState({
-      data,
-      stat: "success",
-      error: null,
-    });
+  const setData = useCallback(
+    (data: D) =>
+      setState({
+        data,
+        stat: "success",
+        error: null,
+      }),
+    []
+  );
   /**
    * 数据加载失败
    * @param error
    */
-  const setError = (error: Error) =>
-    setState({
-      error,
-      stat: "error",
-      data: null,
-    });
+  const setError = useCallback(
+    (error: Error) =>
+      setState({
+        error,
+        stat: "error",
+        data: null,
+      }),
+    []
+  );
   /**
    * 判断状态函数
    * @param promise
    */
-  const run = (
-    promise: Promise<D>,
-    runConfig?: { retry: () => Promise<D> }
-  ) => {
-    // 没有数据传入或者传入数据不正确
-    if (!promise || !promise.then) {
-      throw new Error("请传入 Promise 类型数据");
-    }
-    // 判断是否需要刷新
-    setRetry(() => () => {
-      if (runConfig?.retry) {
-        run(runConfig?.retry(), runConfig);
+  const run = useCallback(
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      // 没有数据传入或者传入数据不正确
+      if (!promise || !promise.then) {
+        throw new Error("请传入 Promise 类型数据");
       }
-    });
-    //设置初始状态
-    setState({
-      ...state,
-      stat: "loading",
-    });
-    // 状态处理
-    return promise
-      .then((data) => {
-        if (mountedRef) {
-          setData(data);
+      // 判断是否需要刷新
+      setRetry(() => () => {
+        if (runConfig?.retry) {
+          run(runConfig?.retry(), runConfig);
         }
-        return data;
-      })
-      .catch((error) => {
-        // catch 会消化异常，如果不主动抛出异常，外界无法接收到异常
-        if (config.throwOnError) {
-          return Promise.reject(error);
-        }
-        setError(error);
-        return error;
       });
-  };
+      //设置初始状态
+      setState((prevState) => ({
+        ...prevState,
+        stat: "loading",
+      }));
+      // 状态处理
+      return promise
+        .then((data) => {
+          if (mountedRef) {
+            setData(data);
+          }
+          return data;
+        })
+        .catch((error) => {
+          // catch 会消化异常，如果不主动抛出异常，外界无法接收到异常
+          if (config.throwOnError) {
+            return Promise.reject(error);
+          }
+          setError(error);
+          return error;
+        });
+    },
+    [config.throwOnError, mountedRef, setData, setError]
+  );
   return {
     isIdle: state.stat === "idle",
     isLoading: state.stat === "loading",
