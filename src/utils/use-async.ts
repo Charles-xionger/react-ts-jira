@@ -2,6 +2,7 @@
  * 异步操作封装 customer hook
  */
 import { useState } from "react";
+import { useMountedRef } from "./index";
 
 interface State<D> {
   error: Error | null;
@@ -28,6 +29,8 @@ export const useAsync = <D>(
     ...defaultInitialState,
     ...initialState,
   });
+  // 组件挂载状态
+  const mountedRef = useMountedRef();
   /**
    * 数据加载失成功
    * @param data
@@ -65,7 +68,9 @@ export const useAsync = <D>(
     // 状态处理
     return promise
       .then((data) => {
-        setData(data);
+        if (mountedRef) {
+          setData(data);
+        }
         return data;
       })
       .catch((error) => {

@@ -5,6 +5,7 @@ import { cleanObject } from "./index";
 import { useHttp } from "./http";
 
 export const useProjects = (param?: Partial<Project>) => {
+  console.log(param, "useProjectsParam");
   const client = useHttp();
   const { run, ...result } = useAsync<Project[]>();
   useEffect(() => {
@@ -20,7 +21,7 @@ export const useEditProject = () => {
 
   const mutate = (params: Partial<Project>) => {
     run(
-      client(`projects'/${params.id}`, {
+      client(`projects/${params.id}`, {
         data: params,
         method: "PATCH",
       })
