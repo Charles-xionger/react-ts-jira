@@ -4,13 +4,10 @@
 
 import React from "react";
 import { Popover, Typography, List, Divider } from "antd";
-import { ButtonNoPadding } from "authenticated-app";
 import { useProjects } from "../utils/project";
 import styled from "@emotion/styled";
 
-export const ProjectPopover = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+export const ProjectPopover = (props: { projectButton: JSX.Element }) => {
   const { data: projects } = useProjects();
   // 筛选出收藏的项目
   const pinnedProjects = projects?.filter((project) => project.pin);
@@ -25,12 +22,7 @@ export const ProjectPopover = (props: {
         ))}
       </List>
       <Divider />
-      <ButtonNoPadding
-        type={"link"}
-        onClick={() => props.setProjectModalOpen(true)}
-      >
-        创建项目
-      </ButtonNoPadding>
+      {props.projectButton}
     </ContentContainer>
   );
   return (
